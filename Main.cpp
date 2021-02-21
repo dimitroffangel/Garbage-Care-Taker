@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "GarbageCollector.h"
+#include "SharedHandler.h"
 
 int main()
 {
