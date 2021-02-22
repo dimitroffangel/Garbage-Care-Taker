@@ -1,5 +1,5 @@
-#ifndef GARBAGECOLLECTOR_H_GUARD
-#define GARBAGECOLLECTOR_H_GUARD
+#ifndef STOPANDCOPYSWEEPMARK_H_GUARD
+#define STOPANDCOPYSWEEPMARK_H_GUARD
 
 #define DEBUG_TRACE_EXECUTION
 
@@ -8,22 +8,21 @@
 
 #include <vector>
 #include "Object.h"
+#include "GarbageCollector.h"
 
 class Allocator;
 
-class GarbageCollector
+class StopCopyGC : public GarbageCollector
 {
-public:
 	std::vector<Int> objectsIndecixes;
 	std::vector<Int> addressedUsed;
 
 	//virtual Object* Allocate(const size_t) = 0;
-	virtual void Reallocate(void* pointer, const size_t oldSize, const size_t newSize);
-	virtual void CollectGarbage();
+	void Reallocate(void* pointer, const size_t oldSize, const size_t newSize);
 	//void MarkRoots();
 	//void MarkValue(Value);
 	//void MarkObject(Object* object);
-	virtual void SweepObjects(Allocator*, Allocator*);
+	virtual void SweepObjects(Allocator*, Allocator*) override;
 };
 
 #endif

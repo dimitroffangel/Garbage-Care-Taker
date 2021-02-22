@@ -24,7 +24,6 @@ void GarbageCollector::CollectGarbage()
 	std::cout << "GC begins ..." << '\n';
 #endif
 
-
 	//MarkRoots();
 
 	std::stack<Int> indexesToIterate;
@@ -88,8 +87,14 @@ void GarbageCollector::CollectGarbage()
 //	object->isMarked = true;
 //}
 
-void GarbageCollector::SweepObjects(Allocator* allocator)
+void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = nullptr)
 {
+	if (fromAlloc == nullptr)
+	{
+		std::cout << "StopCopyGC::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc): fromAlloc == nullptr" << '\n';
+		return;
+	}
+
 	for (Int i = 0; i < addressedUsed.size(); ++i)
 	{
 		Object* currentObject = (Object*)addressedUsed[i];
@@ -115,13 +120,13 @@ void GarbageCollector::SweepObjects(Allocator* allocator)
 			objectValueType == ValueType::ValueInt || objectValueType == ValueType::ValueObject)
 		{
 			// remove the memory
-			allocator->Deallocate(currentObject, currentObject->GetSize());
+			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
 		}
 
 		else
 		{
 			std::cout << "GarbageCollector::SweepObjects(Allocator* allocator)::Array not implemented yet..." << '\n';
-			allocator->Deallocate(currentObject, currentObject->GetSize());
+			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
 		}
 	}
 }
@@ -133,7 +138,7 @@ std::ostream& operator<<(std::ostream& os, const Value& value)
 		os << value.boolean;
 	}
 
-
+	// TODO FOR THE REST OF TYPES
 
 	return os;
 }
