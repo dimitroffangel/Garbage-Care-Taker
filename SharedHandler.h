@@ -54,7 +54,7 @@ public:
 			--(*m_ReferenceCounter);
 
 			m_ReferenceCounter = rhs.m_ReferenceCounter;
-			m_Pointer - rhs.m_Pointer;
+			m_Pointer = rhs.m_Pointer;
 		}
 
 		return *this;
@@ -75,8 +75,6 @@ public:
 
 		return m_Pointer;
 	}
-
-
 
 private:
 	T* m_Pointer = nullptr;
