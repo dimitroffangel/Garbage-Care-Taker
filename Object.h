@@ -26,12 +26,12 @@ class Object;
 class Value
 {
 public:
-	ValueType type = ValueUndefined;
+	ValueType m_Type = ValueUndefined;
 	union
 	{
-		bool boolean;
-		double realNumber;
-		Object* object;
+		bool m_Boolean;
+		double m_RealNumber;
+		Object* m_ObjectPtr;
 	};
 
 	Value()
@@ -40,50 +40,50 @@ public:
 	}
 
 	Value(const bool value)
-		: type(ValueType::ValueBool),
-		  boolean(value)
+		: m_Type(ValueType::ValueBool),
+		  m_Boolean(value)
 	{
 
 	}
 
 	Value(const int value)
-		: type(ValueType::ValueInt),
-		  realNumber(value)
+		: m_Type(ValueType::ValueInt),
+		  m_RealNumber(value)
 	{
 	}
 
 	Value(const double value)
-		: type(ValueType::ValueDouble),
-		realNumber(value)
+		: m_Type(ValueType::ValueDouble),
+		m_RealNumber(value)
 	{
 	}
 
 	Value(Object* objectPtr, const ValueType& valueType)
-		:object(objectPtr)
+		:m_ObjectPtr(objectPtr)
 	{
 		assert(valueType == ValueType::ValueArray || valueType == ValueType::ValueObject);
 
-		type = valueType;
+		m_Type = valueType;
 	}
 
 	operator bool() const
 	{
-		if (type == ValueType::ValueBool)
+		if (m_Type == ValueType::ValueBool)
 		{
-			return boolean;
+			return m_Boolean;
 		}
 
-		if (type == ValueType::ValueArray)
+		if (m_Type == ValueType::ValueArray)
 		{
-			return object != nullptr;
+			return m_ObjectPtr != nullptr;
 		}
 
-		if (type == ValueType::ValueDouble || type == ValueType::ValueInt)
+		if (m_Type == ValueType::ValueDouble || m_Type == ValueType::ValueInt)
 		{
-			return type;
+			return m_Type;
 		}
 
-		if (type == ValueType::ValueUndefined)
+		if (m_Type == ValueType::ValueUndefined)
 		{
 			return false;
 		}
