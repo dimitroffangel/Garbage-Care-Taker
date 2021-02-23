@@ -75,6 +75,7 @@ int main()
 
 		std::cout << sharedHandler.GetReferenceCounter() << '\n';
 	}
+
 	Value val = true;
 	val.m_Type = ValueType::ValueBool;
 
@@ -84,6 +85,9 @@ int main()
 
 	std::cout << val;
 
+	std::function<void(void* pointer, size_t sizeOfChunk)> delGate;
+	int* newInt = new int(42);
+	
 
 
 	return 0;

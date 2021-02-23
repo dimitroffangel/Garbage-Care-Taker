@@ -1,6 +1,8 @@
 #ifndef SHAREDHANDLER_H_GUARD
 #define SHAREDHANDLER_H_GUARD
 
+#include "Allocator.h"
+
 #include <assert.h>
 #include <functional>
 #include <vector>
@@ -41,8 +43,18 @@ public:
 		if (*m_ReferenceCounter == 1)
 		{
 			--(*m_ReferenceCounter);
-			m_AfterDeletionDelegate(m_Pointer, sizeof(*m_Pointer));
-			delete m_Pointer;
+
+			m_Pointer->~T();
+
+			if (m_Allocator != nullptr)
+			{
+				m_Allocator->Deallocate(m_Pointer, sizeof(T));
+			}
+
+			else
+			{
+				delete m_Pointer;
+			}
 			delete m_ReferenceCounter;
 			return;
 		}
@@ -58,7 +70,19 @@ public:
 			if (m_ReferenceCounter == 1)
 			{
 				--(*m_ReferenceCounter);
-				m_AfterDeletionDelegate(m_Pointer);
+
+				m_Pointer->~T();
+
+				if (m_Allocator != nullptr)
+				{
+					m_Allocator->Deallocate(m_Pointer, sizeof(T));
+				}
+
+				else
+				{
+					delete m_Pointer;
+				}
+
 				delete m_Pointer;
 				delete m_ReferenceCounter;
 			}
@@ -109,7 +133,7 @@ public:
 private:
 	T* m_Pointer = nullptr;
 	size_t* m_ReferenceCounter = nullptr;
-	std::function<void(void* pointer, size_t sizeOfChunk)> m_AfterDeletionDelegate;
+	Allocator* m_Allocator = nullptr;
 	friend class WeakHandler<T>;
 };
 
