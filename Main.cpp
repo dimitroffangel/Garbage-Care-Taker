@@ -31,8 +31,22 @@ int main()
 		mission->AddPlayer(player);
 	}
 
-	return 0;
+	
+	{
+		SharedHandler<int> sharedHandler = new int(5);
 
+		sharedHandler.GetReferenceCounter();
+
+		WeakHandler<int> weakHandler = sharedHandler;
+
+		{
+			SharedHandler<int> newShared = weakHandler.LockHandler();
+			std::cout << newShared.GetReferenceCounter() << " VS " << sharedHandler.GetReferenceCounter() << '\n';
+			*newShared = 42;
+		}
+
+		std::cout << sharedHandler.GetReferenceCounter() << '\n';
+	}
 	Value val = true;
 	val.type = ValueType::ValueBool;
 

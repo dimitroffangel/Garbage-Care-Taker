@@ -6,6 +6,9 @@
 #include <vector>
 
 template<class T>
+class WeakHandler;
+
+template<class T>
 class SharedHandler
 {
 public:
@@ -38,7 +41,7 @@ public:
 		if (*m_ReferenceCounter == 1)
 		{
 			--(*m_ReferenceCounter);
-			m_AfterDeletionDelegate(m_Pointer);
+			m_AfterDeletionDelegate(m_Pointer, sizeof(*m_Pointer));
 			delete m_Pointer;
 			delete m_ReferenceCounter;
 			return;
@@ -88,15 +91,26 @@ public:
 		return m_Pointer;
 	}
 
-	int GetReferenceCounter() const
+	T& operator*() const
 	{
-		return m_ReferenceCounter;
+		if (m_Pointer != nullptr)
+		{
+			return *m_Pointer;
+		}
+
+		std::cout << "SharedHandler::operator*() m_Pointer == nullptr" << '\n';
+	}
+
+	size_t GetReferenceCounter() const
+	{
+		return *m_ReferenceCounter;
 	}
 
 private:
 	T* m_Pointer = nullptr;
 	size_t* m_ReferenceCounter = nullptr;
 	std::function<void(void* pointer, size_t sizeOfChunk)> m_AfterDeletionDelegate;
+	friend class WeakHandler<T>;
 };
 
 template<class T>
@@ -104,7 +118,7 @@ class WeakHandler
 {
 public:
 	WeakHandler(const SharedHandler<T>& sharedHandler)
-		: m_Pointer(m_Pointer)
+		: m_Pointer(sharedHandler.m_Pointer)
 	{
 		m_WeakReferenceCounter = new size_t(0);
 		m_SharedReferenceCounter = sharedHandler.m_ReferenceCounter;
@@ -163,9 +177,9 @@ public:
 		return m_SharedReferenceCounter != nullptr && *m_SharedReferenceCounter > 0;
 	}
 
-	SharedHandler LockHandler() 
+	SharedHandler<T> LockHandler() 
 	{
-		return SharedHandler(m_Pointer, m_SharedReferenceCounter);
+		return SharedHandler<T>(m_Pointer, m_SharedReferenceCounter);
 	}
 
 private:
