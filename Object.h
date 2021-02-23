@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <assert.h>
 
 #ifdef _WIN64
 	using Int = unsigned long long;
@@ -39,10 +40,30 @@ public:
 	}
 
 	Value(const bool value)
-		:type(ValueType::ValueBool)
+		: type(ValueType::ValueBool),
+		  boolean(value)
 	{
-		type = ValueType::ValueBool;
-		boolean = value;
+
+	}
+
+	Value(const int value)
+		: type(ValueType::ValueInt),
+		  realNumber(value)
+	{
+	}
+
+	Value(const double value)
+		: type(ValueType::ValueDouble),
+		realNumber(value)
+	{
+	}
+
+	Value(Object* objectPtr, const ValueType& valueType)
+		:object(objectPtr)
+	{
+		assert(valueType == ValueType::ValueArray || valueType == ValueType::ValueObject);
+
+		type = valueType;
 	}
 
 	operator bool() const
