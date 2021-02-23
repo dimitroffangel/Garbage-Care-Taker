@@ -43,7 +43,7 @@ void StopCopyGC::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc)
 		addressedUsed.erase(addressedUsed.begin() + i);
 		--i;
 		// remove the memory
-		const ValueType objectValueType = currentObject->value.type;
+		const ValueType objectValueType = currentObject->value.m_Type;
 
 		if (objectValueType == ValueType::ValueBool || objectValueType == ValueType::ValueDouble ||
 			objectValueType == ValueType::ValueInt || objectValueType == ValueType::ValueObject)
@@ -72,9 +72,9 @@ void StopCopyGC::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc)
 
 		if (currentObject->value == ValueType::ValueObject)
 		{
-			const Int pointeeNewAddress = addressToNewAddress[(Int)currentObject->value.object];
+			const Int pointeeNewAddress = addressToNewAddress[(Int)currentObject->value.m_ObjectPtr];
 
-			currentObject->value.object = (Object*)pointeeNewAddress;
+			currentObject->value.m_ObjectPtr = (Object*)pointeeNewAddress;
 		}
 
 		// problem if there is a pointer outside the allocated space who points to such location

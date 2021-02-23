@@ -22,10 +22,16 @@ public:
 	}
 };
 
-class Foo
+class Foo : public ObjectStaticArray
 {
 public:
-	int fooInt = 42;
+	Object fooInt;
+
+	Foo()
+		:ObjectStaticArray(1, {&fooInt})
+	{
+
+	}
 };
 
 class DerivedFoo0 : public Foo
@@ -42,11 +48,9 @@ public:
 
 int main()
 {
-	Foo* foo = new DerivedFoo0();
+	Foo* foo = new Foo();
 
-	DerivedFoo* derFoo = static_cast<DerivedFoo*>(foo);
 
-	std::cout << derFoo->fooString;
 
 	auto mission = std::make_shared<RaidMission>();
 
@@ -72,11 +76,11 @@ int main()
 		std::cout << sharedHandler.GetReferenceCounter() << '\n';
 	}
 	Value val = true;
-	val.type = ValueType::ValueBool;
+	val.m_Type = ValueType::ValueBool;
 
 	Value val2;
-	val2.object = new Object;
-	val2.object->value = &val;
+	val2.m_ObjectPtr = new Object;
+	val2.m_ObjectPtr->value = &val;
 
 	std::cout << val;
 

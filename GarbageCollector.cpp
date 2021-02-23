@@ -42,11 +42,11 @@ void GarbageCollector::CollectGarbage()
 
 		currentObject->isMarked = true;
 
-		if (currentObject->value.type == ValueType::ValueObject && 
-			currentObject->value.object != nullptr &&
-			!currentObject->value.object->isMarked)
+		if (currentObject->value.m_Type == ValueType::ValueObject && 
+			currentObject->value.m_ObjectPtr != nullptr &&
+			!currentObject->value.m_ObjectPtr->isMarked)
 		{
-			indexesToIterate.push((Int)(currentObject->value.object));
+			indexesToIterate.push((Int)(currentObject->value.m_ObjectPtr));
 		}
 	}
 
@@ -114,7 +114,7 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 		addressedUsed.erase(addressedUsed.begin() + i);
 		--i;
 		// remove the memory
-		const ValueType objectValueType = currentObject->value.type;
+		const ValueType objectValueType = currentObject->value.m_Type;
 
 		if (objectValueType == ValueType::ValueBool || objectValueType == ValueType::ValueDouble ||
 			objectValueType == ValueType::ValueInt || objectValueType == ValueType::ValueObject)
@@ -133,24 +133,24 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 
 std::ostream& operator<<(std::ostream& os, const Value& value)
 {
-	if (value.type == ValueBool)
+	if (value.m_Type == ValueBool)
 	{
-		os << value.boolean;
+		os << value.m_Boolean;
 	}
 
-	else if (value.type == ValueType::ValueDouble)
+	else if (value.m_Type == ValueType::ValueDouble)
 	{
-		os << value.realNumber;
+		os << value.m_RealNumber;
 	}
 
-	else if (value.type == ValueType::ValueInt)
+	else if (value.m_Type == ValueType::ValueInt)
 	{
-		os << value.realNumber;
+		os << value.m_RealNumber;
 	}
 
-	else if (value.type == ValueType::ValueObject)
+	else if (value.m_Type == ValueType::ValueObject)
 	{
-		os << value.object;
+		os << value.m_ObjectPtr;
 	}
 
 	return os;
@@ -163,5 +163,5 @@ Int Object::GetSize() const
 
 Int ObjectStaticArray::GetSize() const
 {
-	return sizeof(Value) * size + Object::GetSize();
+	return sizeof(Value) * m_Size + Object::GetSize();
 }

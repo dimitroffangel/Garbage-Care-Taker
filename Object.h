@@ -108,13 +108,13 @@ class ObjectStaticArray : public Object
 {
 public:
 	const size_t m_Size;
-	const std::vector<Object&> m_Values;
+	const std::vector<Object*> m_Values;
 
-	ObjectStaticArray(const size_t size, std::initializer_list<Object&> objects)
-		: m_Size(size),
-		  m_Values(objects)
+	ObjectStaticArray(const size_t size, std::initializer_list<Object*> initList)
+		:	m_Size(size),
+			m_Values(initList)
 	{
-		
+
 	}
 
 	Int virtual GetSize() const override;
