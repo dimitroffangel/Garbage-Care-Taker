@@ -138,7 +138,20 @@ std::ostream& operator<<(std::ostream& os, const Value& value)
 		os << value.boolean;
 	}
 
-	// TODO FOR THE REST OF TYPES
+	else if (value.type == ValueType::ValueDouble)
+	{
+		os << value.realNumber;
+	}
+
+	else if (value.type == ValueType::ValueInt)
+	{
+		os << value.realNumber;
+	}
+
+	else if (value.type == ValueType::ValueObject)
+	{
+		os << value.object;
+	}
 
 	return os;
 }

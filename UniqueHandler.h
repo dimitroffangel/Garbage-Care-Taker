@@ -12,13 +12,13 @@ public:
 	UniqueHandler(T* m_Pointer)
 		: m_Pointer(m_Pointer)
 	{
-		m_ReferenceCounter = new size_t(1);
+
 	}
 
 	~UniqueHandler()
 	{
-		m_AfterDeletionDelegate(m_Pointer);
 		delete m_Pointer;
+		m_AfterDeletionDelegate(m_Pointer);
 	}
 
 	UniqueHandler* operator=(const UniqueHandler& rhs) = delete;

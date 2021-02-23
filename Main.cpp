@@ -22,8 +22,32 @@ public:
 	}
 };
 
+class Foo
+{
+public:
+	int fooInt = 42;
+};
+
+class DerivedFoo0 : public Foo
+{
+public:
+	double fooDouble = 42.42;
+};
+
+class DerivedFoo : public Foo
+{
+public:
+	std::string fooString = "foo";
+};
+
 int main()
 {
+	Foo* foo = new DerivedFoo0();
+
+	DerivedFoo* derFoo = static_cast<DerivedFoo*>(foo);
+
+	std::cout << derFoo->fooString;
+
 	auto mission = std::make_shared<RaidMission>();
 
 	{
