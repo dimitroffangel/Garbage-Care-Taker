@@ -47,14 +47,27 @@ public:
 
 	operator bool() const
 	{
-		if (type != ValueType::ValueBool)
+		if (type == ValueType::ValueBool)
 		{
-			std::cout << "Value::operator bool() casting value to bool when the value is not bool" << '\n';
+			return boolean;
+		}
+
+		if (type == ValueType::ValueArray)
+		{
+			return object != nullptr;
+		}
+
+		if (type == ValueType::ValueDouble || type == ValueType::ValueInt)
+		{
+			return type;
+		}
+
+		if (type == ValueType::ValueUndefined)
+		{
 			return false;
 		}
-		
 
-		return boolean;
+		std::cout << "Value::operator bool() -> Undetermined ValueType" << '\n';
 	}
 };
 
