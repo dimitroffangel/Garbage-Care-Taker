@@ -15,6 +15,16 @@ public:
 		m_ReferenceCounter = new size_t(1);
 	}
 
+	SharedHandler(T* pointer, size_t* counterPointer)
+	{
+		m_Pointer = pointer;
+
+		assert(counterPointer != nullptr && *counterPointer >= 0);
+		
+		m_ReferenceCounter = counterPointer;
+		++(*m_ReferenceCounter);
+	}
+
 	SharedHandler(const SharedHandler& other):
 		m_ReferenceCounter(other.m_ReferenceCounter),
 		m_Pointer(other.m_Pointer)
@@ -27,6 +37,7 @@ public:
 	{
 		if (*m_ReferenceCounter == 1)
 		{
+			--(*m_ReferenceCounter);
 			m_AfterDeletionDelegate(m_Pointer);
 			delete m_Pointer;
 			delete m_ReferenceCounter;
@@ -43,6 +54,7 @@ public:
 			// if it is the last object remembering that object, annihilate it
 			if (m_ReferenceCounter == 1)
 			{
+				--(*m_ReferenceCounter);
 				m_AfterDeletionDelegate(m_Pointer);
 				delete m_Pointer;
 				delete m_ReferenceCounter;
@@ -76,10 +88,90 @@ public:
 		return m_Pointer;
 	}
 
+	int GetReferenceCounter() const
+	{
+		return m_ReferenceCounter;
+	}
+
 private:
 	T* m_Pointer = nullptr;
-	size_t m_ReferenceCounter = nullptr;
+	size_t* m_ReferenceCounter = nullptr;
 	std::function<void(void* pointer, size_t sizeOfChunk)> m_AfterDeletionDelegate;
+};
+
+template<class T>
+class WeakHandler
+{
+public:
+	WeakHandler(const SharedHandler<T>& sharedHandler)
+		: m_Pointer(m_Pointer)
+	{
+		m_WeakReferenceCounter = new size_t(0);
+		m_SharedReferenceCounter = sharedHandler.m_ReferenceCounter;
+
+		if (*m_SharedReferenceCounter > 0)
+		{
+			++(*m_WeakReferenceCounter);
+		}
+	}
+
+	WeakHandler(const WeakHandler& other) :
+		m_SharedReferenceCounter(other.m_SharedReferenceCounter),
+		m_WeakReferenceCounter(other.m_WeakReferenceCounter),
+		m_Pointer(other.m_Pointer)
+	{
+		++(*m_WeakReferenceCounter);
+	}
+
+
+	~WeakHandler()
+	{
+		if (*m_WeakReferenceCounter== 1)
+		{
+			delete m_WeakReferenceCounter;
+			return;
+		}
+
+		--(*m_WeakReferenceCounter);
+	}
+
+	WeakHandler* operator=(const WeakHandler& rhs)
+	{
+		if (this != &rhs)
+		{
+			// if it is the last object remembering that object, annihilate it
+			if (m_WeakReferenceCounter == 1)
+			{
+				delete m_WeakReferenceCounter;
+			}
+
+			assert(m_WeakReferenceCounter != 0);
+
+			// m_WeakReferenceCounter >= 1
+			--(*m_WeakReferenceCounter);
+
+			m_SharedReferenceCounter = rhs.m_SharedReferenceCounter;
+			m_WeakReferenceCounter = rhs.m_WeakReferenceCounter;
+			m_Pointer = rhs.m_Pointer;
+		}
+
+		return *this;
+	}
+
+	bool HasExpired() const
+	{
+		return m_SharedReferenceCounter != nullptr && *m_SharedReferenceCounter > 0;
+	}
+
+	SharedHandler LockHandler() 
+	{
+		return SharedHandler(m_Pointer, m_SharedReferenceCounter);
+	}
+
+private:
+	T* m_Pointer;
+	size_t* m_SharedReferenceCounter;
+	size_t* m_WeakReferenceCounter;
 };
 
 #endif
