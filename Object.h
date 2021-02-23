@@ -2,6 +2,7 @@
 #define OBJECT_H_GUARD
 
 #include <iostream>
+#include <vector>
 
 #ifdef _WIN64
 	using Int = unsigned long long;
@@ -51,6 +52,7 @@ public:
 			std::cout << "Value::operator bool() casting value to bool when the value is not bool" << '\n';
 			return false;
 		}
+		
 
 		return boolean;
 	}
@@ -71,8 +73,15 @@ public:
 class ObjectStaticArray : public Object
 {
 public:
-	size_t size;
-	Value* values;
+	const size_t m_Size;
+	const std::vector<Object&> m_Values;
+
+	ObjectStaticArray(const size_t size, std::initializer_list<Object&> objects)
+		: m_Size(size),
+		  m_Values(objects)
+	{
+		
+	}
 
 	Int virtual GetSize() const override;
 };
