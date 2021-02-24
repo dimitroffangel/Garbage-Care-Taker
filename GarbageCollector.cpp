@@ -48,6 +48,20 @@ void GarbageCollector::CollectGarbage()
 		{
 			indexesToIterate.push((Int)(currentObject->value.m_ObjectPtr));
 		}
+
+		if (currentObject->value.m_Type == ValueType::ValueArray &&
+			currentObject->value.m_ObjectPtr != nullptr)
+		{
+			ObjectStaticArray* arrayOfObjects = static_cast<ObjectStaticArray*>(currentObject);
+
+			for (const auto element : arrayOfObjects->m_Values)
+			{
+				if (element != nullptr && !element->isMarked)
+				{
+					indexesToIterate.push((Int)(element));
+				}
+			}
+		}
 	}
 
 #ifdef DEBUG_LOG_GC
@@ -120,6 +134,25 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 			objectValueType == ValueType::ValueInt || objectValueType == ValueType::ValueObject)
 		{
 			// remove the memory
+			currentObject->~Object();
+			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
+		}
+
+		else if (objectValueType == ValueType::ValueArray)
+		{
+			auto objectArray = static_cast<ObjectStaticArray*>(currentObject);
+
+
+			for (const auto& element : objectArray->m_Values)
+			{
+				if (element == nullptr)
+				{
+					continue;
+				}
+
+				element->~Object();
+			}
+
 			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
 		}
 
