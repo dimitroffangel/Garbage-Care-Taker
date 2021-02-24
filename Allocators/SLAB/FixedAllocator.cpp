@@ -276,6 +276,11 @@ void* FixedAllocator::Allocate()
 	return allocatedSpace;
 }
 
+void* FixedAllocator::Allocate(const size_t size)
+{
+	return Allocate();
+}
+
 void FixedAllocator::Deallocate(void* pointer)
 {
 	if (pointer == nullptr)

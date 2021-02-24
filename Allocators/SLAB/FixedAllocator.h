@@ -37,6 +37,7 @@ public:
 	FixedAllocator& operator=(const FixedAllocator&);
 
 	void* Allocate();
+	void* Allocate(const size_t size) override;
 	void Deallocate(void* pointer) override;
 	void Deallocate(void* pointer, const size_t size) override;
 
