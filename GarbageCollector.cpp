@@ -18,16 +18,19 @@ void* GarbageCollector::Reallocate(void* pointer, const size_t oldSize, const si
 	if (fromAlloc == nullptr)
 	{
 		std::cout << "GarbageCollector::Reallocate: fromAlloc == nullptr" << '\n';
-		return;
+		return nullptr;;
 	}
 
 	if (toAlloc == nullptr)
 	{
 		std::cout << "GarbageCollector::Reallocate: toAlloc == nullptr" << '\n';
-		return;
+		return nullptr;
 	}
 
 	fromAlloc->Deallocate(pointer, oldSize);
+
+
+
 	return toAlloc->Allocate(oldSize);
 }
 
@@ -41,9 +44,9 @@ void GarbageCollector::CollectGarbage()
 
 	std::stack<Int> indexesToIterate;
 
-	for (size_t i = 0; i < objectsIndecixes.size(); ++i)
+	for (size_t i = 0; i < rootIndexes.size(); ++i)
 	{
-		indexesToIterate.push(objectsIndecixes[i]);
+		indexesToIterate.push(rootIndexes[i]);
 	}
 
 	while (!indexesToIterate.empty())
@@ -85,9 +88,9 @@ void GarbageCollector::CollectGarbage()
 
 //void GarbageCollector::MarkRoots()
 //{
-//	for (size_t i = 0; i < objectsIndecixes.size(); ++i)
+//	for (size_t i = 0; i < objectIndexes.size(); ++i)
 //	{
-//		Object* currentObject = (Object*)(static_cast<char*>(memory) + objectsIndecixes[i]);
+//		Object* currentObject = (Object*)(static_cast<char*>(memory) + objectIndexes[i]);
 //
 //		assert(currentObject != nullptr);
 //

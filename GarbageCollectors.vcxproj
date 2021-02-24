@@ -124,6 +124,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Allocator.cpp" />
+    <ClCompile Include="Allocators\SLAB\Chunk.cpp" />
+    <ClCompile Include="Allocators\SLAB\FastLogarithm.cpp" />
+    <ClCompile Include="Allocators\SLAB\FixedAllocator.cpp" />
+    <ClCompile Include="Allocators\SLAB\SmallObject.cpp" />
+    <ClCompile Include="Allocators\SLAB\SmallObjectAllocator.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GarbageCollector.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -131,6 +136,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Allocator.h" />
+    <ClInclude Include="Allocators\SLAB\Chunk.h" />
+    <ClInclude Include="Allocators\SLAB\FastLogarithm.h" />
+    <ClInclude Include="Allocators\SLAB\FixedAllocator.h" />
+    <ClInclude Include="Allocators\SLAB\SmallObject.h" />
+    <ClInclude Include="Allocators\SLAB\SmallObjectAllocator.h" />
     <ClInclude Include="GarbageCollector.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="SharedHandler.h" />

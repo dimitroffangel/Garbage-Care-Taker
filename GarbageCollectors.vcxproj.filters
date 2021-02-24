@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Allocators">
+      <UniqueIdentifier>{31d0aba7-e363-4c88-a1b7-b744968ea0ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators\SLAB">
+      <UniqueIdentifier>{f64eac13-1497-4f62-8143-e0f9e5a32cfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators\SLAB\Header Files">
+      <UniqueIdentifier>{b4a34e7d-8bbe-406b-a26c-8816fd8f97c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators\SLAB\Source Files">
+      <UniqueIdentifier>{cc971047-f9a2-4629-ad2c-b3c7859c2262}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -29,6 +41,21 @@
     </ClCompile>
     <ClCompile Include="StopAndCopySweepMark.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators\SLAB\SmallObject.cpp">
+      <Filter>Allocators\SLAB\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators\SLAB\SmallObjectAllocator.cpp">
+      <Filter>Allocators\SLAB\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators\SLAB\Chunk.cpp">
+      <Filter>Allocators\SLAB\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators\SLAB\FixedAllocator.cpp">
+      <Filter>Allocators\SLAB\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators\SLAB\FastLogarithm.cpp">
+      <Filter>Allocators\SLAB\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +76,21 @@
     </ClInclude>
     <ClInclude Include="UniqueHandler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators\SLAB\Chunk.h">
+      <Filter>Allocators\SLAB\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators\SLAB\FixedAllocator.h">
+      <Filter>Allocators\SLAB\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators\SLAB\SmallObject.h">
+      <Filter>Allocators\SLAB\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators\SLAB\SmallObjectAllocator.h">
+      <Filter>Allocators\SLAB\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators\SLAB\FastLogarithm.h">
+      <Filter>Allocators\SLAB\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

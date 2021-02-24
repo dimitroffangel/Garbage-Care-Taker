@@ -238,6 +238,13 @@ void* FixedAllocator::Allocate()
 		{
 			if (it == m_Chunks.end())
 			{
+				if (m_GC != nullptr)
+				{
+					m_GC->CollectGarbage();
+					m_GC->SweepObjects(this, this);
+				}
+				
+
 				//m_Chunks.reserve(m_Chunks.size() + 1);
 				Chunk newChunk;
 				newChunk.Initialize(m_BlockSize, m_NumberOfBlocks);
@@ -258,7 +265,15 @@ void* FixedAllocator::Allocate()
 	assert(m_RecentlyAllocatedChunk != nullptr);
 	assert(m_RecentlyAllocatedChunk->m_BlockAvailable > 0);
 
-	return m_RecentlyAllocatedChunk->Allocate(m_BlockSize);
+	void* allocatedSpace = m_RecentlyAllocatedChunk->Allocate(m_BlockSize);
+
+	if (m_GC != nullptr)
+	{
+		m_GC->addressedUsed.push_back((Int)allocatedSpace);
+		m_GC->rootIndexes.push_back(m_GC->addressedUsed.size() - 1);
+	}
+
+	return allocatedSpace;
 }
 
 void FixedAllocator::Deallocate(void* pointer)
@@ -291,4 +306,9 @@ void FixedAllocator::Deallocate(void* pointer)
 	assert(m_RecentlyDeallocatedChunk != nullptr);
 
 	DoDeallocation(pointer);
+}
+
+void FixedAllocator::Deallocate(void* pointer, const size_t size)
+{
+	Deallocate(pointer);
 }

@@ -14,7 +14,7 @@ class Allocator;
 
 class StopCopyGC : public GarbageCollector
 {
-	std::vector<Int> objectsIndecixes;
+	std::vector<Int> objectIndexes;
 	std::vector<Int> addressedUsed;
 
 	//virtual Object* Allocate(const size_t) = 0;

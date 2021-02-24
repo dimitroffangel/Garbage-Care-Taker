@@ -14,7 +14,7 @@ class Allocator;
 class GarbageCollector
 {
 public:
-	std::vector<Int> objectsIndecixes;
+	std::vector<Int> rootIndexes;
 	std::vector<Int> addressedUsed;
 
 	//virtual Object* Allocate(const size_t) = 0;

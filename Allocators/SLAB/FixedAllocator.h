@@ -5,7 +5,10 @@
 
 #include "Chunk.h"
 
-class FixedAllocator
+#include "../../GarbageCollector.h"
+#include "../../Allocator.h"
+
+class FixedAllocator : public Allocator
 {
 private:
 	void DoDeallocation(void* pointer);
@@ -23,6 +26,8 @@ private:
 	FixedAllocator* m_PreviousFixedAlloc = nullptr;
 	FixedAllocator* m_NextFixedAlloc = nullptr;
 
+	GarbageCollector* m_GC;
+
 public:
 	explicit FixedAllocator(std::size_t blockSize = 0);
 	~FixedAllocator();
@@ -32,7 +37,8 @@ public:
 	FixedAllocator& operator=(const FixedAllocator&);
 
 	void* Allocate();
-	void Deallocate(void* pointer);
+	void Deallocate(void* pointer) override;
+	void Deallocate(void* pointer, const size_t size) override;
 
 	std::size_t BlockSize() const
 	{
