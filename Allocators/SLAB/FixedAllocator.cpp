@@ -3,7 +3,7 @@
 #include <vector>
 #include <assert.h>
 
-#include "FastLogarithm.h"
+#include "../FastLogarithm.h"
 
 FixedAllocator::FixedAllocator(std::size_t blockSize)
 	:m_BlockSize(blockSize)

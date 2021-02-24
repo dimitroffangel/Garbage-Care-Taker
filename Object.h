@@ -90,6 +90,8 @@ public:
 		}
 
 		std::cout << "Value::operator bool() -> Undetermined ValueType" << '\n';
+
+		return false;
 	}
 };
 

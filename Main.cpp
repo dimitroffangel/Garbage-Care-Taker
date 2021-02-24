@@ -27,6 +27,11 @@ class Foo : public ObjectStaticArray
 public:
 	Object fooInt;
 
+	~Foo()
+	{
+		std::cout << "calling ~Foo()..." << '\n';
+	}
+
 	Foo()
 		:ObjectStaticArray(1, {&fooInt})
 	{
@@ -48,9 +53,6 @@ public:
 
 int main()
 {
-	Foo* foo = new Foo();
-
-
 
 	auto mission = std::make_shared<RaidMission>();
 

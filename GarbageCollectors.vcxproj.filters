@@ -25,6 +25,21 @@
     <Filter Include="Allocators\SLAB\Source Files">
       <UniqueIdentifier>{cc971047-f9a2-4629-ad2c-b3c7859c2262}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Allocators\Buddy">
+      <UniqueIdentifier>{a9e610b1-46bc-4273-ae01-27f9e8f063b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators\Buddy\Header Files">
+      <UniqueIdentifier>{12d7c042-3e01-4805-9156-4dbc7d9553c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators\Buddy\Source Files">
+      <UniqueIdentifier>{8c80a44d-1fec-4240-91fa-9e36d69da63c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators\Header Files">
+      <UniqueIdentifier>{6af2062e-acd3-4a47-b6e9-b83f93acce2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators\Source Files">
+      <UniqueIdentifier>{3f6d4e50-e66e-48d9-adb8-9c7ce6f27ae5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -54,8 +69,14 @@
     <ClCompile Include="Allocators\SLAB\FixedAllocator.cpp">
       <Filter>Allocators\SLAB\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Allocators\SLAB\FastLogarithm.cpp">
-      <Filter>Allocators\SLAB\Source Files</Filter>
+    <ClCompile Include="Allocators\Buddy\BuddyAllocator.cpp">
+      <Filter>Allocators\Buddy\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators\Buddy\BuddyAllocatorObject.cpp">
+      <Filter>Allocators\Buddy\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators\FastLogarithm.cpp">
+      <Filter>Allocators\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,8 +110,14 @@
     <ClInclude Include="Allocators\SLAB\SmallObjectAllocator.h">
       <Filter>Allocators\SLAB\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Allocators\SLAB\FastLogarithm.h">
-      <Filter>Allocators\SLAB\Header Files</Filter>
+    <ClInclude Include="Allocators\Buddy\BuddyAllocator.h">
+      <Filter>Allocators\Buddy\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators\Buddy\BuddyAllocatorObject.h">
+      <Filter>Allocators\Buddy\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Allocators\FastLogarithm.h">
+      <Filter>Allocators\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
