@@ -39,9 +39,6 @@ void StopCopyGC::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc)
 			addressToNewAddress[(Int)currentObject] = newAddress;
 		}
 
-		// remove the address from the addressedUsedBlock
-		addressedUsed.erase(addressedUsed.begin() + i);
-		--i;
 		// remove the memory
 		const ValueType objectValueType = currentObject->value.m_Type;
 
@@ -80,9 +77,13 @@ void StopCopyGC::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc)
 
 	// update references from the allocated space
 	addressedUsed.clear();
+	rootIndexes.clear();
+	size_t i = 0;
+
 	for (const auto pair : addressToNewAddress)
 	{
 		addressedUsed.push_back(pair.second);
+		rootIndexes.push_back(i++);
 
 		Object* const currentObject = (Object*)pair.first;
 

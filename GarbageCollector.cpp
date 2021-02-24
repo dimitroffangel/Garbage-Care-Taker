@@ -125,6 +125,9 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 		return;
 	}
 
+	std::vector<Int> newAddressedUsed;
+	std::vector<Int> newRoots;
+
 	for (Int i = 0; i < addressedUsed.size(); ++i)
 	{
 		Object* currentObject = (Object*)addressedUsed[i];
@@ -137,12 +140,16 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 
 		if (currentObject->isMarked == true)
 		{
+			newAddressedUsed.push_back((Int)currentObject);
+			newRoots.push_back(i);
 			continue;
 		}
 
 		// remove the address from the addressedUsedBlock
-		addressedUsed.erase(addressedUsed.begin() + i);
-		--i;
+	
+		//addressedUsed.erase(addressedUsed.begin() + i);
+		//--i;
+		
 		// remove the memory
 		const ValueType objectValueType = currentObject->value.m_Type;
 
@@ -207,6 +214,9 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
 		}
 	}
+
+	addressedUsed = newAddressedUsed;
+	rootIndexes = newRoots;
 }
 
 std::ostream& operator<<(std::ostream& os, const Value& value)
