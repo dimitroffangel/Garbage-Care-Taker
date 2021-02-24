@@ -101,6 +101,11 @@ public:
 	bool isMarked = false;
 	// TODO reference to another object ???
 
+	virtual ~Object()
+	{
+
+	}
+
 	Int virtual GetSize() const;
 };
 
