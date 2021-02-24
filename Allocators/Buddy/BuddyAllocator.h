@@ -4,6 +4,8 @@
 #include "../FastLogarithm.h"
 
 #include <iostream>
+#include "../../Allocator.h"
+#include "../../GarbageCollector.h"
 
 /*
 	totalSize = (1 << numberOfLevels) * leafSize
@@ -24,10 +26,13 @@ struct FreeListInformation
 	PtrInt* next = nullptr;
 };
 
-class BuddyAllocator
+class BuddyAllocator : protected Allocator
 {
 	static const int MAX_LEVELS = 31;
 	static const size_t NUMBER_OF_BITSET_FOR_FREE_TABLE = DEFAULT_BUDDY_ALLOCATOR_SIZE / LEAF_SIZE;
+
+public:
+	GarbageCollector* m_GC;
 
 private:
 	BuddyAllocator();
@@ -53,10 +58,11 @@ private:
 
 
 public:
-	void Deallocate(void* pointer, size_t blockSize);
+	virtual void Deallocate(void* pointer, size_t blockSize) override;
+	virtual void Deallocate(void* pointer) override;
 	void Free(void* pointer, size_t levelIndex);
 	void Free(void* pointer);
-	void* Allocate(size_t blockSize);
+	virtual void* Allocate(size_t blockSize) override;
 	
 public:
 	//size_t m_NumberOfLevels = MAX_LEVELS;

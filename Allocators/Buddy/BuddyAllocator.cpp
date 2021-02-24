@@ -290,6 +290,16 @@ void BuddyAllocator::Deallocate(void* pointer, size_t blockSize)
 	Free(pointer, level);
 }
 
+void BuddyAllocator::Deallocate(void* pointerToFree)
+{
+	if (pointerToFree == nullptr)
+	{
+		return;
+	}
+
+	Free(pointerToFree);
+}
+
 void BuddyAllocator::Free(void* pointerToFree, size_t levelIndex)
 {
 	if (pointerToFree == nullptr)
@@ -629,5 +639,12 @@ void* BuddyAllocator::Allocate(size_t blockSize)
 	}
 
 	std::cout << "BuddyAllocator::Allocate() No Free Slot available..." << '\n';
+
+	if (m_GC != nullptr)
+	{
+		m_GC->CollectGarbage();
+		m_GC->SweepObjects(this, this);
+	}
+
 	return nullptr;
 }
