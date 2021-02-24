@@ -5,6 +5,8 @@
 #include <functional>
 #include <vector>
 
+#include "Allocator.h"
+
 template<class T>
 class UniqueHandler
 {
@@ -17,8 +19,20 @@ public:
 
 	~UniqueHandler()
 	{
+		if (m_Pointer == nullptr)
+		{
+			return;
+		}
+
+		m_Pointer->~T();
+
+		if (m_Allocator != nullptr)
+		{
+			m_Allocator->Deallocate(m_Pointer, sizeof(T));
+			return;
+		}
+
 		delete m_Pointer;
-		m_AfterDeletionDelegate(m_Pointer);
 	}
 
 	UniqueHandler* operator=(const UniqueHandler& rhs) = delete;
@@ -33,15 +47,25 @@ public:
 		if (m_Pointer == nullptr)
 		{
 			std::cout << "UniqueHandler::operator-> m_Pointer is nullptr" << '\n';
-			return;
+			return nullptr;
 		}
 
 		return m_Pointer;
 	}
 
+	T& operator*() const
+	{
+		if (m_Pointer == nullptr)
+		{
+			std::cout << "UniqueHandler::operator-> m_Pointer is nullptr" << '\n';
+		}
+
+		return *m_Pointer;
+	}
+
 private:
 	T* m_Pointer = nullptr;
-	std::function<void(void* pointer, size_t sizeOfChunk)> m_AfterDeletionDelegate;
+	Allocator* m_Allocator = nullptr;
 };
 
 #endif

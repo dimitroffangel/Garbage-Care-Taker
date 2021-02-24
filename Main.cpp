@@ -2,6 +2,7 @@
 
 #include "GarbageCollector.h"
 #include "SharedHandler.h"
+#include "UniqueHandler.h"
 
 class RaidMission;
 class Player
@@ -53,6 +54,11 @@ public:
 
 int main()
 {
+	{
+		UniqueHandler<int> uniqHandle = new int(5);
+		
+		*uniqHandle = 42;
+	}
 
 	auto mission = std::make_shared<RaidMission>();
 
