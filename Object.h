@@ -62,7 +62,7 @@ public:
 	Value(Object* objectPtr, const ValueType& valueType)
 		:m_ObjectPtr(objectPtr)
 	{
-		assert(valueType == ValueType::ValueArray || valueType == ValueType::ValueObject);
+		assert(valueType == ValueType::ValueArray || valueType == ValueType::ValueObject || valueType == ValueType::ValueArray);
 
 		m_Type = valueType;
 	}

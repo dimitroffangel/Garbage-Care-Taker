@@ -44,6 +44,7 @@ void GarbageCollector::CollectGarbage()
 
 	std::stack<Int> indexesToIterate;
 
+	// add the roots to the queue
 	for (size_t i = 0; i < rootIndexes.size(); ++i)
 	{
 		indexesToIterate.push(rootIndexes[i]);
@@ -217,4 +218,17 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 
 	addressedUsed = newAddressedUsed;
 	rootIndexes = newRoots;
+
+	for (size_t i = 0; i < addressedUsed.size(); ++i)
+	{
+		Object* currentObject = (Object*)addressedUsed[i];
+
+		if (currentObject == nullptr)
+		{
+			std::cout << "GarbageCollector::SweepObjects() currentObject == nullptr" << '\n';
+			continue;
+		}
+
+		currentObject->isMarked = false;
+	}
 }

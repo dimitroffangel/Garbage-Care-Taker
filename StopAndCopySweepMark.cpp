@@ -99,4 +99,17 @@ void StopCopyGC::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc)
 
 		// problem if there is a pointer outside the allocated space who points to such location
 	}
+
+	for (size_t i = 0; i < addressedUsed.size(); ++i)
+	{
+		Object* currentObject = (Object*)addressedUsed[i];
+
+		if (currentObject == nullptr)
+		{
+			std::cout << "GarbageCollector::SweepObjects() currentObject == nullptr" << '\n';
+			continue;
+		}
+
+		currentObject->isMarked = false;
+	}
 }
