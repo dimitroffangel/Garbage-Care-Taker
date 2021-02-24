@@ -49,6 +49,25 @@ void StopCopyGC::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc)
 			objectValueType == ValueType::ValueInt || objectValueType == ValueType::ValueObject)
 		{
 			// remove the memory
+			currentObject->~Object();
+			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
+		}
+
+		else if (objectValueType == ValueType::ValueArray)
+		{
+			auto objectArray = static_cast<ObjectStaticArray*>(currentObject);
+
+
+			for (const auto& element : objectArray->m_Values)
+			{
+				if (element == nullptr)
+				{
+					continue;
+				}
+
+				element->~Object();
+			}
+
 			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
 		}
 
