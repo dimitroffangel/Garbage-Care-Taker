@@ -18,7 +18,6 @@ class StopCopyGC : public GarbageCollector
 	std::vector<Int> addressedUsed;
 
 	//virtual Object* Allocate(const size_t) = 0;
-	void Reallocate(void* pointer, const size_t oldSize, const size_t newSize);
 	//void MarkRoots();
 	//void MarkValue(Value);
 	//void MarkObject(Object* object);

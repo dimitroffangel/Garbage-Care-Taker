@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <stack>
 
-void GarbageCollector::Reallocate(void* pointer, const size_t oldSize, const size_t newSize)
+void* GarbageCollector::Reallocate(void* pointer, const size_t oldSize, const size_t newSize, Allocator* fromAlloc, Allocator* toAlloc)
 {
 	if (newSize > oldSize)
 	{
@@ -15,7 +15,20 @@ void GarbageCollector::Reallocate(void* pointer, const size_t oldSize, const siz
 #endif
 	}
 
-	// TODO
+	if (fromAlloc == nullptr)
+	{
+		std::cout << "GarbageCollector::Reallocate: fromAlloc == nullptr" << '\n';
+		return;
+	}
+
+	if (toAlloc == nullptr)
+	{
+		std::cout << "GarbageCollector::Reallocate: toAlloc == nullptr" << '\n';
+		return;
+	}
+
+	fromAlloc->Deallocate(pointer, oldSize);
+	return toAlloc->Allocate(oldSize);
 }
 
 void GarbageCollector::CollectGarbage()
@@ -49,7 +62,7 @@ void GarbageCollector::CollectGarbage()
 			indexesToIterate.push((Int)(currentObject->value.m_ObjectPtr));
 		}
 
-		if (currentObject->value.m_Type == ValueType::ValueArray &&
+		if ((currentObject->value.m_Type == ValueType::ValueArray || currentObject->value.m_Type == ValueType::ValueClass) &&
 			currentObject->value.m_ObjectPtr != nullptr)
 		{
 			ObjectStaticArray* arrayOfObjects = static_cast<ObjectStaticArray*>(currentObject);
@@ -140,8 +153,13 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 
 		else if (objectValueType == ValueType::ValueArray)
 		{
-			auto objectArray = static_cast<ObjectStaticArray*>(currentObject);
+			ObjectStaticArray* objectArray = static_cast<ObjectStaticArray*>(currentObject);
 
+			if (objectArray == nullptr)
+			{
+				std::cout << "GarbageCollector::SweepObjects() objectArray == nullptr" << '\n';
+				return;
+			}
 
 			for (const auto& element : objectArray->m_Values)
 			{
@@ -153,6 +171,30 @@ void GarbageCollector::SweepObjects(Allocator* fromAlloc, Allocator* toAlloc = n
 				element->~Object();
 			}
 
+			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
+		}
+
+		else if (objectValueType == ValueType::ValueClass)
+		{
+			ObjectStaticArray* objectArray = static_cast<ObjectStaticArray*>(currentObject);
+
+			if (objectArray == nullptr)
+			{
+				std::cout << "GarbageCollector::SweepObjects() objectArray == nullptr" << '\n';
+				return;
+			}
+
+			for (const auto& element : objectArray->m_Values)
+			{
+				if (element == nullptr)
+				{
+					continue;
+				}
+
+				element->~Object();
+			}
+
+			objectArray->~ObjectStaticArray();
 			fromAlloc->Deallocate(currentObject, currentObject->GetSize());
 		}
 

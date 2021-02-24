@@ -18,6 +18,7 @@ enum ValueType
 	ValueBool,
 	ValueObject,
 	ValueArray,
+	ValueClass,
 	ValueUndefined
 };
 
